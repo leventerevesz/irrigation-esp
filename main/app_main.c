@@ -83,5 +83,4 @@ void app_main()
     gpio_init();
 
     mqtt_app_start();
-    blink_output();
 }
