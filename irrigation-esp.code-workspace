@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"mqtt.h": "c",
+			"mqtt_client.h": "c"
+		}
+	}
+}
