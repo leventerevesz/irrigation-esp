@@ -51,10 +51,10 @@ esp_err_t mqtt_event_handler(esp_mqtt_event_handle_t event)
             msg_id = esp_mqtt_client_publish(client, "/info", "ESP connected", 0, 1, 0);
             ESP_LOGI(TAG, "sent publish successful, msg_id=%d", msg_id);
 
-            msg_id = esp_mqtt_client_subscribe(client, "/commands/valve/1", 1);
-            ESP_LOGI(TAG, "subscribed to /commands/valve/1, msg_id=%d", msg_id);
+            msg_id = esp_mqtt_client_subscribe(client, TOPIC_VALVE_0_COMMAND, 1);
+            ESP_LOGI(TAG, "subscribed to /commands/valve/0, msg_id=%d", msg_id);
 
-            msg_id = esp_mqtt_client_subscribe(client, "/commands/valve/2", 1);
+            msg_id = esp_mqtt_client_subscribe(client, TOPIC_VALVE_1_COMMAND, 1);
             ESP_LOGI(TAG, "subscribed to /commands/valve/1, msg_id=%d", msg_id);
 
         case MQTT_EVENT_DISCONNECTED:
@@ -78,12 +78,12 @@ esp_err_t mqtt_event_handler(esp_mqtt_event_handle_t event)
             printf("TOPIC=%.*s\r\n", event->topic_len, event->topic);
             printf("DATA=%.*s\r\n", event->data_len, event->data);
 
-            if (strcmp(event->topic, "commands/v/0") == 0)
+            if (strcmp(event->topic, TOPIC_VALVE_0_COMMAND) == 0)
             {
                 gpio_num_t output_num = GPIO_OUTPUT_IO_0;
                 mqtt_valve_execute_command(output_num, event->data);
             }
-            else if (strcmp(event->topic, "commands/v/1") == 0)
+            else if (strcmp(event->topic, TOPIC_VALVE_1_COMMAND) == 0)
             {
                 gpio_num_t output_num = GPIO_OUTPUT_IO_1;
                 mqtt_valve_execute_command(output_num, event->data);
