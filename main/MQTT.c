@@ -10,6 +10,7 @@
 #include "app_main.h"
 #include "MQTT.h"
 #include "GPIO.h"
+#include "ADC.h"
 
 static void mqtt_connected_event_handler(esp_mqtt_client_handle_t client);
 static void mqtt_data_event_handler(esp_mqtt_event_handle_t event);
@@ -73,6 +74,7 @@ esp_err_t mqtt_event_handler(esp_mqtt_event_handle_t event)
 
 static void mqtt_data_event_handler(esp_mqtt_event_handle_t event)
 {
+    esp_mqtt_client_handle_t client = event->client;
     //TODO remove these printfs
     printf("TOPIC=%.*s\r\n", event->topic_len, event->topic);
     printf("DATA=%.*s\r\n", event->data_len, event->data);
@@ -85,6 +87,10 @@ static void mqtt_data_event_handler(esp_mqtt_event_handle_t event)
     {
         gpio_num_t output_num = GPIO_OUTPUT_IO_1;
         mqtt_valve_execute_command(output_num, event->data);
+    }
+    else if (strcmp(event->topic, TOPIC_TANKLEVEL_SUB) == 0)
+    {
+        mqtt_tank_level_request_handler(client);
     }
 }
 
@@ -118,4 +124,15 @@ static void mqtt_valve_execute_command(gpio_num_t output_num, char* data)
     {
         ESP_LOGE(TAG, "UNKNOWN VALVE COMMAND");
     }
+}
+
+static void mqtt_tank_level_request_handler(esp_mqtt_client_handle_t client)
+{
+    int msg_id;
+    double level = get_tank_level();
+    char buffer[8];
+    sprintf(buffer, "%5.2f", level);
+
+    msg_id = esp_mqtt_client_publish(client, TOPIC_TANKLEVEL_PUB, buffer, 0, 1, 1);
+    ESP_LOGI(TAG, "tanklevel %s, msg_id=%d", buffer, msg_id);
 }

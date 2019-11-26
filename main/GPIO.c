@@ -15,6 +15,7 @@
 
 void gpio_init()
 {
+    // configure outputs
     gpio_config_t io_conf;
     //disable interrupt
     io_conf.intr_type = GPIO_PIN_INTR_DISABLE;
