@@ -12,6 +12,9 @@ static const adc_channel_t channel = ADC_CHANNEL_6;     //GPIO34 if ADC1, GPIO14
 static const adc_atten_t atten = ADC_ATTEN_DB_0;
 static esp_adc_cal_characteristics_t *adc_chars;
 
+static double voltage2distance(uint32_t voltage);
+static double distance2tanklevel(uint32_t distance);
+
 void adc_init()
 {
 
@@ -43,13 +46,13 @@ uint32_t read_adc()
     return voltage; // mV
 }
 
-double voltage2distance(uint32_t voltage)
+static double voltage2distance(uint32_t voltage)
 {
     double distance = 785409 * pow(voltage, -1.174);
     return distance; // mm
 }
 
-double distance2tanklevel(uint32_t distance)
+static double distance2tanklevel(uint32_t distance)
 {
     double height = 1000 - distance + TANK_LEVEL_OFFSET;
     return height / 10; // %
