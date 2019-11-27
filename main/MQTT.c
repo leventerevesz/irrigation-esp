@@ -15,6 +15,7 @@
 static void mqtt_connected_event_handler(esp_mqtt_client_handle_t client);
 static void mqtt_data_event_handler(esp_mqtt_event_handle_t event);
 static void mqtt_valve_execute_command(gpio_num_t output_num, char* data);
+static void mqtt_tank_level_request_handler(esp_mqtt_client_handle_t client);
 
 
 void mqtt_app_start(void)
@@ -44,7 +45,7 @@ esp_err_t mqtt_event_handler(esp_mqtt_event_handle_t event)
             break;
 
         case MQTT_EVENT_SUBSCRIBED:
-            ESP_LOGI(TAG, "MQTT_EVENT_SUBSCRIBED, msg_id=%d", event->msg_id);
+            //ESP_LOGI(TAG, "MQTT_EVENT_SUBSCRIBED, msg_id=%d", event->msg_id);
             break;
 
         case MQTT_EVENT_UNSUBSCRIBED:
@@ -107,6 +108,9 @@ static void mqtt_connected_event_handler(esp_mqtt_client_handle_t client)
 
     msg_id = esp_mqtt_client_subscribe(client, TOPIC_VALVE_1_COMMAND, 1);
     ESP_LOGI(TAG, "subscribed to %s, msg_id=%d", TOPIC_VALVE_1_COMMAND, msg_id);
+
+    msg_id = esp_mqtt_client_subscribe(client, TOPIC_TANKLEVEL_SUB, 1);
+    ESP_LOGI(TAG, "subscribed to %s, msg_id=%d", TOPIC_TANKLEVEL_SUB, msg_id);
 }
 
 
@@ -129,9 +133,9 @@ static void mqtt_valve_execute_command(gpio_num_t output_num, char* data)
 static void mqtt_tank_level_request_handler(esp_mqtt_client_handle_t client)
 {
     int msg_id;
-    double level = get_tank_level();
+    double level = read_tank_level();
     char buffer[8];
-    sprintf(buffer, "%5.2f", level);
+    sprintf(buffer, "%6.2f", level);
 
     msg_id = esp_mqtt_client_publish(client, TOPIC_TANKLEVEL_PUB, buffer, 0, 1, 1);
     ESP_LOGI(TAG, "tanklevel %s, msg_id=%d", buffer, msg_id);

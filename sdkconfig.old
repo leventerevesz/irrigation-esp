@@ -83,9 +83,9 @@ CONFIG_MONITOR_BAUD=115200
 #
 # Example Configuration
 #
-CONFIG_WIFI_SSID="myssid"
-CONFIG_WIFI_PASSWORD="mypassword"
-CONFIG_BROKER_URL="mqtt://iot.eclipse.org"
+CONFIG_WIFI_SSID="Revesz1"
+CONFIG_WIFI_PASSWORD="1Nutellaspalacsinta"
+CONFIG_BROKER_URL="mqtt://192.168.0.122"
 
 #
 # Partition Table

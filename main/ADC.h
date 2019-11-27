@@ -6,6 +6,7 @@
 
 void adc_init();
 uint32_t read_adc();
+double read_distance();
 double read_tank_level();
 
 #endif

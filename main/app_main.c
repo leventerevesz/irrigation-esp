@@ -14,6 +14,7 @@
 #include "WiFi.h"
 #include "MQTT.h"
 #include "GPIO.h"
+#include "ADC.h"
 
 const char *TAG = "MQTT_EXAMPLE";
 
@@ -33,6 +34,7 @@ void app_main()
     nvs_flash_init();
     wifi_init();
     gpio_init();
+    adc_init();
 
     mqtt_app_start();
 }
