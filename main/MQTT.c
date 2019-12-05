@@ -116,13 +116,13 @@ static void mqtt_connected_event_handler(esp_mqtt_client_handle_t client)
 
 static void mqtt_valve_execute_command(gpio_num_t output_num, char* data)
 {
-    if (strcmp(data, "o") == 0)
+    if (strncmp(data, "o", 1) == 0)
     {
-        gpio_set_level(output_num, 1);
+        gpio_set_level(output_num, VALVE_OPEN);
     }
-    else if (strcmp(data, "c") == 0)
+    else if (strncmp(data, "c", 1) == 0)
     {
-        gpio_set_level(output_num, 0);
+        gpio_set_level(output_num, VALVE_CLOSE);
     }
     else
     {

@@ -6,6 +6,9 @@
 #define TOPIC_TANKLEVEL_SUB "/get/tanklevel"
 #define TOPIC_TANKLEVEL_PUB "/sensors/tanklevel"
 
+#define VALVE_OPEN 0
+#define VALVE_CLOSE 1
+
 void mqtt_app_start(void);
 
 esp_err_t mqtt_event_handler(esp_mqtt_event_handle_t event);
